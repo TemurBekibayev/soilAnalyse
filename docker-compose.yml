@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: agromind-app
+    container_name: agromind-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - agromind-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: agromind-nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - agromind-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: agromind-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: agromind
+      MYSQL_USER: agromind
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - agromind-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: agromind-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    networks:
+      - agromind-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: agromind-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: agromind
+      PMA_PASSWORD: secret
+    depends_on:
+      - mysql
+    networks:
+      - agromind-network
+
+networks:
+  agromind-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  redis_data:
