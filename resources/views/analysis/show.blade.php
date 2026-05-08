@@ -25,6 +25,12 @@
                     <h3 class="text-lg font-semibold mb-4 border-b pb-2">Tahlil ma'lumotlari</h3>
                     <div class="space-y-4">
                         <div class="flex justify-between">
+                            <span class="text-gray-600 font-medium">Ekin turi</span>
+                            <span class="font-bold text-indigo-600">
+                                {{ $analysis->target_crop ?? 'Ko\'rsatilmagan' }}
+                            </span>
+                        </div>
+                        <div class="flex justify-between">
                             <span class="text-gray-600 font-medium">pH darajasi</span>
                             <span class="font-bold {{ $analysis->ph < 5.5 || $analysis->ph > 7.5 ? 'text-red-600' : 'text-green-600' }}">
                                 {{ $analysis->ph ?? 'N/A' }}

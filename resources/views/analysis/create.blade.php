@@ -23,6 +23,12 @@
                                 <x-input-error class="mt-2" :messages="$errors->get('farm_id')" />
                             </div>
 
+                            <div class="col-span-full">
+                                <x-input-label for="target_crop" :value="__('Ekilgan yoki ekilmoqchi bo\'lgan ekin turi')" />
+                                <x-text-input id="target_crop" name="target_crop" type="text" class="mt-1 block w-full" :value="old('target_crop')" placeholder="Masalan: Paxta, Bug'doy, Pomidor..." />
+                                <x-input-error class="mt-2" :messages="$errors->get('target_crop')" />
+                            </div>
+
                             <div>
                                 <x-input-label for="analysis_date" :value="__('Tahlil sanasi')" />
                                 <x-text-input id="analysis_date" name="analysis_date" type="date" class="mt-1 block w-full" :value="old('analysis_date', date('Y-m-d'))" required />

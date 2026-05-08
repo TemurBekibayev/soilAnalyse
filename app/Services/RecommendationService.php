@@ -68,10 +68,14 @@ class RecommendationService
     protected function buildPrompt(SoilAnalysis $analysis)
     {
         $farm = $analysis->farm;
+        $soilType = ($farm->soil_type && $farm->soil_type !== 'Unknown') ? $farm->soil_type : "Noma'lum (tahlil ma'lumotlariga qarab aniqlashga harakat qiling)";
+        $cropInfo = $analysis->target_crop ? "Ekilgan/Ekilmoqchi bo'lgan ekin: {$analysis->target_crop}" : "Ekin turi ko'rsatilmagan (eng mos ekinlarni tavsiya qiling)";
+        
         return "Iltimos, quyidagi xo'jalik uchun tuproq va atrof-muhit tahlili ma'lumotlarini tahlil qiling:
         Xo'jalik nomi: {$farm->name}
         Joylashuvi: {$farm->location}
-        Tuproq turi: {$farm->soil_type}
+        Tuproq turi: {$soilType}
+        {$cropInfo}
         
         Tahlil ma'lumotlari:
         - pH darajasi: {$analysis->ph}
@@ -83,9 +87,11 @@ class RecommendationService
         
         Quyidagilarni taqdim eting:
         1. Atrof-muhit va tuproq holatini baholash.
-        2. Ushbu sharoitda yaxshi o'sadigan tavsiya etilgan ekinlar.
+        2. " . ($analysis->target_crop ? "Ushbu ekin ({$analysis->target_crop}) uchun ushbu sharoit qanchalik mos ekanligini baholang va uni yetishtirish bo'yicha maxsus maslahatlar bering." : "Ushbu sharoitda yaxshi o'sadigan tavsiya etilgan ekinlar.") . "
         3. Maxsus parvarish va o'g'itlash rejasi.
-        4. Quyosh nuri yoki namlikni optimallashtirish bo'yicha maslahatlar.";
+        4. Quyosh nuri yoki namlikni optimallashtirish bo'yicha maslahatlar.
+        
+        MUHIM: Barcha tavsiyalar aynan ko'rsatilgan ekinga ({$analysis->target_crop}) qaratilgan bo'lishi kerak.";
     }
 
     protected function parseResponse($content)

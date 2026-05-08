@@ -31,6 +31,7 @@ class SoilAnalysisController extends Controller
     {
         $validated = $request->validate([
             'farm_id' => 'required|exists:farms,id',
+            'target_crop' => 'nullable|string|max:255',
             'ph' => 'nullable|numeric|between:3.5,9',
             'fertility' => 'nullable|integer|between:0,3000',
             'moisture' => 'nullable|numeric|between:0,99',
