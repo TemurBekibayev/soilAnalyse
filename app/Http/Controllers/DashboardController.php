@@ -9,6 +9,11 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
         $farmsCount = $user->farms()->count();
         $analysesCount = $user->farms()->withCount('soilAnalyses')->get()->sum('soil_analyses_count');
         $recentAnalyses = \App\Models\SoilAnalysis::whereIn('farm_id', $user->farms()->pluck('id'))
