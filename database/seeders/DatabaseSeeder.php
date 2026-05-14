@@ -15,13 +15,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::firstOrCreate(
-            ['email' => 'test@example.com'],
-            [
-                'name' => 'Test User',
-                'password' => bcrypt('password'), // default password for test user
-                'email_verified_at' => now(),
-            ]
-        );
+        $user = User::where('email', 'test@example.com')->first();
+        
+        if (!$user) {
+            $user = new User();
+            $user->name = 'Test User';
+            $user->email = 'test@example.com';
+            $user->password = bcrypt('password');
+            $user->email_verified_at = now();
+            $user->save();
+        }
     }
 }
