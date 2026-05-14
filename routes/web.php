@@ -3,17 +3,17 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     if (!auth()->check()) {
-//         $user = \App\Models\User::first();
-//         if ($user) {
-//             auth()->login($user);
-//         }
-//     }
-//     return redirect()->route('dashboard');
-// });
+Route::get('/', function () {
+    if (!auth()->check()) {
+        $user = \App\Models\User::first();
+        if ($user) {
+            auth()->login($user);
+        }
+    }
+    return redirect()->route('dashboard');
+});
 
-// Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     
     Route::resource('farms', \App\Http\Controllers\FarmController::class);
@@ -24,6 +24,6 @@ use Illuminate\Support\Facades\Route;
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
+});
 
 require __DIR__.'/auth.php';
