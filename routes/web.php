@@ -13,7 +13,7 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     
     Route::resource('farms', \App\Http\Controllers\FarmController::class);
