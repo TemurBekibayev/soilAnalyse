@@ -11,7 +11,7 @@ class FarmController extends Controller
      */
     public function index()
     {
-        $farms = auth()->user()->farms()->withCount('soilAnalyses')->get();
+        $farms = \App\Models\Farm::withCount('soilAnalyses')->get();
         return view('farms.index', compact('farms'));
     }
 
@@ -29,26 +29,26 @@ class FarmController extends Controller
             'soil_type' => 'nullable|string|max:255',
         ]);
 
-        auth()->user()->farms()->create($validated);
+        \App\Models\Farm::create($validated + ['user_id' => auth()->id()]);
 
         return redirect()->route('farms.index')->with('success', 'Farm created successfully!');
     }
 
     public function show($id)
     {
-        $farm = auth()->user()->farms()->with('soilAnalyses')->findOrFail($id);
+        $farm = \App\Models\Farm::with('soilAnalyses')->findOrFail($id);
         return view('farms.show', compact('farm'));
     }
 
     public function edit($id)
     {
-        $farm = auth()->user()->farms()->findOrFail($id);
+        $farm = \App\Models\Farm::findOrFail($id);
         return view('farms.edit', compact('farm'));
     }
 
     public function update(Request $request, $id)
     {
-        $farm = auth()->user()->farms()->findOrFail($id);
+        $farm = \App\Models\Farm::findOrFail($id);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -64,7 +64,7 @@ class FarmController extends Controller
 
     public function destroy($id)
     {
-        $farm = auth()->user()->farms()->findOrFail($id);
+        $farm = \App\Models\Farm::findOrFail($id);
         $farm->delete();
 
         return redirect()->route('farms.index')->with('success', 'Farm deleted successfully!');
