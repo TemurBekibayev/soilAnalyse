@@ -58,7 +58,7 @@ class RecommendationService
         } catch (\Exception $e) {
             Log::error('Groq API Error: ' . $e->getMessage());
             return [
-                'content' => 'Unable to generate recommendation at this time. Please try again later.',
+                'content' => 'Groq API Error: ' . $e->getMessage(),
                 'recommended_crops' => [],
                 'fertilizer_plan' => []
             ];
